@@ -1,0 +1,33 @@
+/*
+    https://unpkg.com/browse/iobroker.comfoairq@0.1.0/admin/jsonConfig.json
+    https://github.com/ioBroker/ioBroker.admin/blob/a19915fdb2daa9c96ad189d16d824be06962123b/src-rx/src/components/JsonConfigComponent/SCHEMA.md
+    https://github.com/ioBroker/ioBroker.admin/issues/1326
+*/
+{
+    "i18n": true,
+    "type": "panel",
+    "items": {
+        "localInterface": {
+            "type": "ip",
+            "sm": 12,
+            "md": 6,
+            "lg": 6,
+            "label": "Local interface",
+            "help": "Interface which should be used for network connection",
+            "onlyIp4": true,
+            "listenOnAllPorts": true
+        },       
+        "host": {
+            "newLine": true,
+            "type": "text",
+            "sm": 12,
+            "md": 6,
+            "lg": 6,
+            "label": "IP-Address of raumfeld host",
+            "help": "If your raumfeld host has a fixed ip you can enter it here",
+            "validator" : "(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/gi).test(data.host);",
+            "validatorErrorText": "No valid ip for raumfeld host",
+            "validatorNoSaveOnError": true
+        }
+    }
+}
