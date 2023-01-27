@@ -7,6 +7,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
+const { Raumkernel } = require('D:\\Projects\\Raumfeld\\node-raumkernel');
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -26,63 +27,52 @@ class Raumfeld extends utils.Adapter {
         // this.on('objectChange', this.onObjectChange.bind(this));
         // this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
+
+        this.raumkernel = new Raumkernel();
     }
 
     /**
      * Is called when databases are connected and adapter received configuration.
      */
     async onReady() {
-        // Initialize your adapter here
 
-        // The adapters config (in the instance object everything under the attribute "native") is accessible via
-        // this.config:
-        this.log.info('config option1: ' + this.config.option1);
-        this.log.info('config option2: ' + this.config.option2);
+        this.raumkernel.settings.raumfeldHost = '0.0.0.0';
+        this.raumkernel.createLogger(5);
+        this.raumkernel.init();
 
-        /*
-        For every state in the system there has to be also an object of type state
-        Here a simple template for a boolean variable named "testVariable"
-        Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-        */
-        await this.setObjectNotExistsAsync('testVariable', {
-            type: 'state',
-            common: {
-                name: 'testVariable',
-                type: 'boolean',
-                role: 'indicator',
-                read: true,
-                write: true,
-            },
-            native: {},
+        this.raumkernel.on('systemReady', (_ready) => {
+            this.log.info(`System ready: ${_ready}`);
         });
 
-        // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-        this.subscribeStates('testVariable');
-        // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-        // this.subscribeStates('lights.*');
-        // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-        // this.subscribeStates('*');
+        this.raumkernel.on('zoneCreated', (_zoneUDN) => {
+            this.log.info(`Zone created: ${_zoneUDN}`);
+        });
 
-        /*
-            setState examples
-            you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-        */
-        // the variable testVariable is set to true as command (ack=false)
-        await this.setStateAsync('testVariable', true);
+        this.raumkernel.on('zoneRemoved', (_zoneUDN) => {
+            this.log.info(`Zone deleted: ${_zoneUDN}`);
+        });
 
-        // same thing, but the value is flagged "ack"
-        // ack should be always set to true if the value is received from or acknowledged from the target system
-        await this.setStateAsync('testVariable', { val: true, ack: true });
+        this.raumkernel.on('roomAddedToZone', (_zoneUDN, _roomUDN) => {
+            this.log.info(`Room ${_roomUDN} added to zone ${_zoneUDN}`);
+        });
 
-        // same thing, but the state is deleted after 30s (getState will return null afterwards)
-        await this.setStateAsync('testVariable', { val: true, ack: true, expire: 30 });
+        this.raumkernel.on('roomRemovedFromZone', (_zoneUDN, _roomUDN) => {
+            this.log.info(`Room ${_roomUDN} removed from zone ${_zoneUDN}`);
+        });
 
-        // examples for the checkPassword/checkGroup functions
-        let result = await this.checkPasswordAsync('admin', 'iobroker');
-        this.log.info('check user admin pw iobroker: ' + result);
+        this.raumkernel.on('rendererMediaItemDataChanged', (_mediaRenderer, _mediaItemData) => {
+            this.log.info(`Renderer: ${_mediaRenderer.id},  item: ${JSON.stringify(_mediaItemData)}`);
+        });
 
-        result = await this.checkGroupAsync('admin', 'admin');
-        this.log.info('check group user admin group admin: ' + result);
+        this.raumkernel.on('combinedZoneStateChanged', (_combinedStateData) => {
+            this.log.info(`Combinded state: ${JSON.stringify(_combinedStateData)}`);
+        });
+
+        this.raumkernel.on('zoneConfigurationChanged', (_zoneConfiguration) => {
+            this.log.info(`Zone configuration: ${JSON.stringify(_zoneConfiguration)}`);
+        });
+
+
     }
 
     /**
