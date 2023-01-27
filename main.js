@@ -38,7 +38,7 @@ class Raumfeld extends utils.Adapter {
     async onReady() {
 
         this.raumkernel.settings.raumfeldHost = '0.0.0.0';
-        //this.raumkernel.createLogger(5);
+        this.raumkernel.createLogger(5, '/tmp/');
         this.raumkernel.init();
 
         this.raumkernel.on('systemReady', (_ready) => {
