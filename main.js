@@ -1,17 +1,7 @@
 'use strict';
 
-/*
- * Created with @iobroker/create-adapter v2.3.0
- */
-
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-//const { Raumkernel } = require('D:\\Projects\\Raumfeld\\node-raumkernel');
 const { Raumkernel } = require('node-raumkernel');
-
-// Load your modules here, e.g.:
-// const fs = require("fs");
 
 class Raumfeld extends utils.Adapter {
 
@@ -38,8 +28,15 @@ class Raumfeld extends utils.Adapter {
     async onReady() {
 
         this.raumkernel.settings.raumfeldHost = '0.0.0.0';
-        this.raumkernel.createLogger(5, '/tmp/');
-        this.raumkernel.init();
+        this.raumkernel.settings.localAddress = this.config.localInterface ? this.config.localInterface : '';
+        this.log.debug(`Using interface: ${this.raumkernel.settings.localAddress}`);
+
+        this.raumkernel.createLogger(5);
+
+        this.raumkernel.logger.on('log', (_logData) => {
+            // TODO: logs types
+            this.log.info(`${_logData.logType}: ${_logData.log}`);
+        })
 
         this.raumkernel.on('systemReady', (_ready) => {
             this.log.info(`System ready: ${_ready}`);
@@ -73,7 +70,7 @@ class Raumfeld extends utils.Adapter {
             this.log.info(`Zone configuration: ${JSON.stringify(_zoneConfiguration)}`);
         });
 
-
+        this.raumkernel.init();
     }
 
     /**
