@@ -14,6 +14,8 @@
 
 Controller for the raumfeld multiroom system by Teufel
 
+WORK IN PROGRESS
+
 ## Developer manual
 This section is intended for the developer. It can be deleted later.
 
