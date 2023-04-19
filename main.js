@@ -191,9 +191,9 @@ class Raumfeld extends utils.Adapter {
                 const roomObject = _combinedStateData.availableRooms[roomIdx];
                 this.log.debug(`RoomObject : ${roomObject}`);
                 await this.createObjectNotExists('rooms.' + roomObject.name, roomObject.name, 'device', null);
-                await this.createOrUpdateState('rooms.' + + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
-                await this.createOrUpdateState('rooms.' + + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
-                await this.createOrUpdateState('rooms.' + + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
             }
         }
 
@@ -203,9 +203,9 @@ class Raumfeld extends utils.Adapter {
             {
                 const roomObject = _combinedStateData.unassignedRooms[roomIdx];
                 await this.createObjectNotExists('rooms.' + roomObject.name, roomObject.name, 'device', null);
-                await this.createOrUpdateState('rooms.' + + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
-                await this.createOrUpdateState('rooms.' + + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
-                await this.createOrUpdateState('rooms.' + + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
             }
         }
 
