@@ -50,32 +50,32 @@ class Raumfeld extends utils.Adapter {
         });
 
         this.raumkernel.on('zoneCreated', (_zoneUDN) => {
-            this.log.info(`Zone created: ${_zoneUDN}`);
+           // this.log.info(`Zone created: ${_zoneUDN}`);
         });
 
         this.raumkernel.on('zoneRemoved', (_zoneUDN) => {
-            this.log.info(`Zone deleted: ${_zoneUDN}`);
+            //this.log.info(`Zone deleted: ${_zoneUDN}`);
         });
 
         this.raumkernel.on('roomAddedToZone', (_zoneUDN, _roomUDN) => {
-            this.log.info(`Room ${_roomUDN} added to zone ${_zoneUDN}`);
+            //this.log.info(`Room ${_roomUDN} added to zone ${_zoneUDN}`);
         });
 
         this.raumkernel.on('roomRemovedFromZone', (_zoneUDN, _roomUDN) => {
-            this.log.info(`Room ${_roomUDN} removed from zone ${_zoneUDN}`);
+            //this.log.info(`Room ${_roomUDN} removed from zone ${_zoneUDN}`);
         });
 
         this.raumkernel.on('rendererMediaItemDataChanged', (_mediaRenderer, _mediaItemData) => {
-            this.log.info(`Renderer: ${_mediaRenderer.id},  item: ${JSON.stringify(_mediaItemData)}`);
+           // this.log.info(`Renderer: ${_mediaRenderer.id},  item: ${JSON.stringify(_mediaItemData)}`);
         });
 
         this.raumkernel.on('combinedZoneStateChanged', (_combinedStateData) => {
-            this.log.info(`Combinded state: ${JSON.stringify(_combinedStateData)}`);
+            //this.log.info(`Combinded state: ${JSON.stringify(_combinedStateData)}`);
             this.updateRoomInformation(_combinedStateData);
         });
 
         this.raumkernel.on('zoneConfigurationChanged', (_zoneConfiguration) => {
-            this.log.info(`Zone configuration: ${JSON.stringify(_zoneConfiguration)}`);
+           // this.log.info(`Zone configuration: ${JSON.stringify(_zoneConfiguration)}`);
         });
 
 
@@ -187,6 +187,7 @@ class Raumfeld extends utils.Adapter {
             for(let roomIdx=0; roomIdx<_combinedStateData.availableRooms.length; roomIdx)
             {
                 const roomObject = _combinedStateData.availableRooms[roomIdx];
+                this.log.debug(`RoomObject : ${roomObject}`);
                 await this.createObjectNotExists('rooms.' + roomObject.name, roomObject.name, 'device', null);
                 await this.createOrUpdateState('rooms.' + + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
                 await this.createOrUpdateState('rooms.' + + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
