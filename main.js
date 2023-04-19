@@ -93,8 +93,8 @@ class Raumfeld extends utils.Adapter {
     {
         let converted;
 
-        if(_value === null)
-            return _value;
+        if(_value === null || _value === undefined)
+            return null;
 
         switch(_type)
         {
