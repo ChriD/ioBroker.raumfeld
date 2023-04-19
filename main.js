@@ -191,6 +191,7 @@ class Raumfeld extends utils.Adapter {
                 const roomObject = _combinedStateData.availableRooms[roomIdx];
                 this.log.debug(`RoomObject : ${roomObject}`);
                 await this.createObjectNotExists('rooms.' + roomObject.name, roomObject.name, 'device', null);
+                await this.createObjectNotExists('rooms.' + roomObject.name + '.media', roomObject.name, 'device', null);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
@@ -206,6 +207,11 @@ class Raumfeld extends utils.Adapter {
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
+
+                // there is no media item on a room which is not in a zone. Only zones handle the media items
+                // but we sync the media items to the room object
+                await this.delStateAsync('rooms.' + roomObject.name + '.media');
+                await this.delObjectAsync('rooms.' + roomObject.name + '.media', {recursive: true});
             }
         }
 
