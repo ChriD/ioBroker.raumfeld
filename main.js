@@ -181,6 +181,8 @@ class Raumfeld extends utils.Adapter {
      */
     async updateRoomInformation(_combinedStateData)
     {
+        await this.createObjectNotExists('rooms', 'rooms', 'channel', null);
+
         // go through all existing rooms and create the objects for them if they are not exists
         if(_combinedStateData.availableRooms && _combinedStateData.availableRooms.length)
         {
