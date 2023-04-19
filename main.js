@@ -186,7 +186,7 @@ class Raumfeld extends utils.Adapter {
         // go through all existing rooms and create the objects for them if they are not exists
         if(_combinedStateData.availableRooms && _combinedStateData.availableRooms.length)
         {
-            for(let roomIdx=0; roomIdx<_combinedStateData.availableRooms.length; roomIdx)
+            for(let roomIdx=0; roomIdx<_combinedStateData.availableRooms.length; roomIdx++)
             {
                 const roomObject = _combinedStateData.availableRooms[roomIdx];
                 this.log.debug(`RoomObject : ${roomObject}`);
@@ -199,7 +199,7 @@ class Raumfeld extends utils.Adapter {
 
         if(_combinedStateData.unassignedRooms && _combinedStateData.unassignedRooms.length)
         {
-            for(let roomIdx=0; roomIdx<_combinedStateData.unassignedRooms.length; roomIdx)
+            for(let roomIdx=0; roomIdx<_combinedStateData.unassignedRooms.length; roomIdx++)
             {
                 const roomObject = _combinedStateData.unassignedRooms[roomIdx];
                 await this.createObjectNotExists('rooms.' + roomObject.name, roomObject.name, 'device', null);
