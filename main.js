@@ -85,7 +85,7 @@ class Raumfeld extends utils.Adapter {
     /**
      * conversion method for any value to the type given in the parameters
      * currently only 'string' and 'number' is a valid type
-     * @param  {any} _value the value ehich should be converted
+     * @param  {any} _value the value which should be converted
      * @param  {String} _type the type the value should be converted to
      * @return {any} _value converted to the given _type
      */
@@ -182,6 +182,7 @@ class Raumfeld extends utils.Adapter {
             for(let roomIdx=0; roomIdx<zoneObject.rooms.length; roomIdx++)
             {
                 const roomObject = zoneObject.room[roomIdx];
+                this.log.error(`CHECK: ${roomObject.udn} == ${_roomUDN}`);
                 if(roomObject.udn == _roomUDN)
                     return zoneObject;
             }
