@@ -174,6 +174,21 @@ class Raumfeld extends utils.Adapter {
         }
     }
 
+    findZoneObjectForRoomUDN(_combinedState, _roomUDN)
+    {
+        for(let zoneIdx=0; zoneIdx<_combinedState.zones; zoneIdx++)
+        {
+            const zoneObject = _combinedState.zones[zoneIdx];
+            for(let roomIdx=0; roomIdx<zoneObject.rooms.length; roomIdx++)
+            {
+                const roomObject = zoneObject.room[roomIdx];
+                if(roomObject.udn == _roomUDN)
+                    return zoneObject;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * creates/deletes/updates a channel for each room and adds infodata to it
@@ -197,7 +212,10 @@ class Raumfeld extends utils.Adapter {
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
 
-                await this.updateMediaInfo('rooms.' + roomObject.name + '.media', mediaItem)
+                // find the room within a zone, because there we can get the media item information which we can add to this room
+                const zoneObject = this.findZoneObjectForRoomUDN(_combinedStateData, roomObject.udn);
+
+                await this.updateMediaInfo('rooms.' + roomObject.name + '.media', zoneObject ? zoneObject.mediaItem : null);
             }
         }
 
@@ -237,14 +255,13 @@ class Raumfeld extends utils.Adapter {
 
     async updateMediaInfo(_path, _mediaItemObject)
     {
-      _mediaItemObject = _mediaItemObject ? _mediaItemObject : {};
- 
-      await this.createOrUpdateState(_path + '.class', 'class', DATATYPE.STRING, '', _mediaItemObject.class);
-      await this.createOrUpdateState(_path + '.section', 'section', DATATYPE.STRING, '', _mediaItemObject.section);
-      await this.createOrUpdateState(_path + '.name', 'name', DATATYPE.STRING, '', _mediaItemObject.name);
-      await this.createOrUpdateState(_path + '.parentID', 'parentID', DATATYPE.STRING, '', _mediaItemObject.parentID);
-      await this.createOrUpdateState(_path + '.refID', 'refID', DATATYPE.STRING, '', _mediaItemObject.refID);
-      await this.createOrUpdateState(_path + '.id', 'id', DATATYPE.STRING, '', _mediaItemObject.id);
+        _mediaItemObject = _mediaItemObject ? _mediaItemObject : {}; 
+        await this.createOrUpdateState(_path + '.class', 'class', DATATYPE.STRING, '', _mediaItemObject.class);
+        await this.createOrUpdateState(_path + '.section', 'section', DATATYPE.STRING, '', _mediaItemObject.section);
+        await this.createOrUpdateState(_path + '.name', 'name', DATATYPE.STRING, '', _mediaItemObject.name);
+        await this.createOrUpdateState(_path + '.parentID', 'parentID', DATATYPE.STRING, '', _mediaItemObject.parentID);
+        await this.createOrUpdateState(_path + '.refID', 'refID', DATATYPE.STRING, '', _mediaItemObject.refID);
+        await this.createOrUpdateState(_path + '.id', 'id', DATATYPE.STRING, '', _mediaItemObject.id);
     }
       /*
 
