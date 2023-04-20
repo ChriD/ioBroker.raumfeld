@@ -148,7 +148,7 @@ class Raumfeld extends utils.Adapter {
      * @param  {Boolean} _allowSetValue indicates if the given value will be set (mainly used for syncing the state object with admin)
      * @return {Promise}
      */
-    async createOrUpdateState(_id, _name, _stateType, _stateRole, _stateValue, _deleteStateOnNullValue = true, _allowSetValue = true)
+    async createOrUpdateState(_id, _name, _stateType, _stateRole, _stateValue, _deleteStateOnNullValue = false, _allowSetValue = true)
     {
         const commonObject = {
             type: _stateType,
@@ -192,9 +192,12 @@ class Raumfeld extends utils.Adapter {
                 this.log.debug(`RoomObject : ${roomObject}`);
                 await this.createObjectNotExists('rooms.' + roomObject.name, roomObject.name, 'device', null);
                 await this.createObjectNotExists('rooms.' + roomObject.name + '.media', roomObject.name, 'device', null);
+
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.udn', 'udn', DATATYPE.STRING, '', roomObject.udn);
+
+                await this.updateMediaInfo('rooms.' + roomObject.name + '.media', mediaItem)
             }
         }
 
@@ -210,9 +213,11 @@ class Raumfeld extends utils.Adapter {
 
                 // there is no media item on a room which is not in a zone. Only zones handle the media items
                 // but we sync the media items to the room object
+                // TODO: should only empty the media fields? That may be the better idea!
                 await this.delStateAsync('rooms.' + roomObject.name + '.media');
                 await this.delObjectAsync('rooms.' + roomObject.name + '.media', {recursive: true});
             }
+
         }
 
         // delete the ones not mentioned in the list
@@ -229,6 +234,38 @@ class Raumfeld extends utils.Adapter {
                 }
             }
         */
+    }
+
+    async updateMediaInfo(_path, _mediaItemObject)
+    {
+      _mediaItemObject = _mediaItemObject ? _mediaItemObject : {};
+ 
+      await this.createOrUpdateState(_path + '.class', 'class', DATATYPE.STRING, '', _mediaItemObject.class);
+      await this.createOrUpdateState(_path + '.section', 'section', DATATYPE.STRING, '', _mediaItemObject.section);
+      await this.createOrUpdateState(_path + '.name', 'name', DATATYPE.STRING, '', _mediaItemObject.name);
+      await this.createOrUpdateState(_path + '.parentID', 'parentID', DATATYPE.STRING, '', _mediaItemObject.parentID);
+      await this.createOrUpdateState(_path + '.refID', 'refID', DATATYPE.STRING, '', _mediaItemObject.refID);
+      await this.createOrUpdateState(_path + '.id', 'id', DATATYPE.STRING, '', _mediaItemObject.id);
+      /*
+
+ "mediaItem":{
+                 "class":"object.item.audioItem.musicTrack",
+                 "section":"Napster",
+                 "name":"Track",                                
+                 "parentID":"0/Favorites/RecentlyPlayed",                 
+                 "refID":"0/Napster/ImportedFavorites/Track/Tra.57957268",
+                 "id":"0/Favorites/RecentlyPlayed/44865",
+                 "title":"Fürstenfeld",                 
+                 "artist":"S.T.S.",
+                 "genre":null,
+                 "album":"Überdosis G'fühl",                 
+                 "originalTrackNumber":"5",
+                 "duration":"0:05:27.000",
+                 "protocolInfo":"rhapsody-track:*:audio/rhapsody-track:*",
+                 "albumArtURI":"https://cdn-profiles.tunein.com/s25217/images/logog.jpg?t=636650246801600000"
+                 "bitrate":"128"                 
+              }       
+      },
     }
 
     /*
