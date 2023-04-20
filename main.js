@@ -217,7 +217,6 @@ class Raumfeld extends utils.Adapter {
                 await this.delStateAsync('rooms.' + roomObject.name + '.media');
                 await this.delObjectAsync('rooms.' + roomObject.name + '.media', {recursive: true});
             }
-
         }
 
         // delete the ones not mentioned in the list
@@ -246,6 +245,7 @@ class Raumfeld extends utils.Adapter {
       await this.createOrUpdateState(_path + '.parentID', 'parentID', DATATYPE.STRING, '', _mediaItemObject.parentID);
       await this.createOrUpdateState(_path + '.refID', 'refID', DATATYPE.STRING, '', _mediaItemObject.refID);
       await this.createOrUpdateState(_path + '.id', 'id', DATATYPE.STRING, '', _mediaItemObject.id);
+    }
       /*
 
  "mediaItem":{
