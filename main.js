@@ -184,7 +184,7 @@ class Raumfeld extends utils.Adapter {
             const zoneObject = _combinedState.zones[zoneIdx];
             for(let roomIdx=0; roomIdx<zoneObject.rooms.length; roomIdx++)
             {
-                const roomObject = zoneObject.room[roomIdx];
+                const roomObject = zoneObject.rooms[roomIdx];
                 this.log.error(`CHECK: ${roomObject.udn} == ${_roomUDN}`);
                 if(roomObject.udn == _roomUDN)
                     return zoneObject;
