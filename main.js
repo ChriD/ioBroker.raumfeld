@@ -176,6 +176,9 @@ class Raumfeld extends utils.Adapter {
 
     findZoneObjectForRoomUDN(_combinedState, _roomUDN)
     {
+        if(!_combinedState.zones)
+            return null;
+
         for(let zoneIdx=0; zoneIdx<_combinedState.zones.length; zoneIdx++)
         {
             const zoneObject = _combinedState.zones[zoneIdx];
