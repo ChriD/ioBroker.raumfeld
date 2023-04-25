@@ -209,7 +209,33 @@ class Raumfeld extends utils.Adapter {
                 const roomObject = _combinedStateData.availableRooms[roomIdx];
                 this.log.debug(`RoomObject : ${roomObject}`);
                 await this.createObjectNotExists('rooms.' + roomObject.name, roomObject.name, 'device', null);
+
                 await this.createObjectNotExists('rooms.' + roomObject.name + '.media', roomObject.name, 'device', null);
+                await this.createObjectNotExists('rooms.' + roomObject.name + '.zone', 'zone', 'device', null);
+                await this.createObjectNotExists('rooms.' + roomObject.name + '.zone.control', 'control', 'device', null);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.play', 'play', DATATYPE.BOOLEAN, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.stop', 'stop', DATATYPE.BOOLEAN, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.pause', 'pause', DATATYPE.BOOLEAN, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.next', 'next', DATATYPE.BOOLEAN, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.prev', 'prev', DATATYPE.BOOLEAN, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.seek', 'seek', DATATYPE.STRING, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.systemSound', 'systemSound', DATATYPE.NUMBER, '', 0);
+
+                /*
+                TODO:   RoomMute
+                        RoomVolume
+                        SleepTimer
+                        Standby
+                        loadPlaylist
+
+                        SETTINGS: Volume fade time
+
+                */ 
+
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.playMode', 'playMode', DATATYPE.STRING, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.mute', 'mute', DATATYPE.BOOLEAN, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.volume', 'volume', DATATYPE.NUMBER, '', 0);
+                await this.createOrUpdateState('rooms.' + roomObject.name + '.zone.control.avTransportUri', 'avTransportUri', DATATYPE.STRING, '', 0);
 
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.name', 'name', DATATYPE.STRING, '', roomObject.name);
                 await this.createOrUpdateState('rooms.' + roomObject.name + '.powerState', 'powerState', DATATYPE.STRING, '', roomObject.powerState);
@@ -258,19 +284,17 @@ class Raumfeld extends utils.Adapter {
 
     async updateMediaInfo(_path, _mediaItemObject)
     {
-        _mediaItemObject = _mediaItemObject ? _mediaItemObject : {}; 
+        _mediaItemObject = _mediaItemObject ? _mediaItemObject : {};
         await this.createOrUpdateState(_path + '.class', 'class', DATATYPE.STRING, '', _mediaItemObject.class);
         await this.createOrUpdateState(_path + '.section', 'section', DATATYPE.STRING, '', _mediaItemObject.section);
         await this.createOrUpdateState(_path + '.name', 'name', DATATYPE.STRING, '', _mediaItemObject.name);
         await this.createOrUpdateState(_path + '.parentID', 'parentID', DATATYPE.STRING, '', _mediaItemObject.parentID);
         await this.createOrUpdateState(_path + '.refID', 'refID', DATATYPE.STRING, '', _mediaItemObject.refID);
         await this.createOrUpdateState(_path + '.id', 'id', DATATYPE.STRING, '', _mediaItemObject.id);
-
         await this.createOrUpdateState(_path + '.title', 'title', DATATYPE.STRING, '', _mediaItemObject.title);
         await this.createOrUpdateState(_path + '.artist', 'artist', DATATYPE.STRING, '', _mediaItemObject.artist);
         await this.createOrUpdateState(_path + '.genre', 'genre', DATATYPE.STRING, '', _mediaItemObject.genre);
         await this.createOrUpdateState(_path + '.album', 'album', DATATYPE.STRING, '', _mediaItemObject.album);
-
         await this.createOrUpdateState(_path + '.date', 'date', DATATYPE.STRING, '', _mediaItemObject.date);
         await this.createOrUpdateState(_path + '.duration', 'duration', DATATYPE.STRING, '', _mediaItemObject.duration);
         await this.createOrUpdateState(_path + '.albumArtURI', 'albumArtURI', DATATYPE.STRING, '', _mediaItemObject.albumArtURI);
