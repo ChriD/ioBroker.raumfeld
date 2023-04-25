@@ -185,7 +185,6 @@ class Raumfeld extends utils.Adapter {
             for(let roomIdx=0; roomIdx<zoneObject.rooms.length; roomIdx++)
             {
                 const roomObject = zoneObject.rooms[roomIdx];
-                this.log.error(`CHECK: ${roomObject.udn} == ${_roomUDN}`);
                 if(roomObject.udn == _roomUDN)
                     return zoneObject;
             }
@@ -266,38 +265,17 @@ class Raumfeld extends utils.Adapter {
         await this.createOrUpdateState(_path + '.parentID', 'parentID', DATATYPE.STRING, '', _mediaItemObject.parentID);
         await this.createOrUpdateState(_path + '.refID', 'refID', DATATYPE.STRING, '', _mediaItemObject.refID);
         await this.createOrUpdateState(_path + '.id', 'id', DATATYPE.STRING, '', _mediaItemObject.id);
+
+        await this.createOrUpdateState(_path + '.title', 'title', DATATYPE.STRING, '', _mediaItemObject.title);
+        await this.createOrUpdateState(_path + '.artist', 'artist', DATATYPE.STRING, '', _mediaItemObject.artist);
+        await this.createOrUpdateState(_path + '.genre', 'genre', DATATYPE.STRING, '', _mediaItemObject.genre);
+        await this.createOrUpdateState(_path + '.album', 'album', DATATYPE.STRING, '', _mediaItemObject.album);
+
+        await this.createOrUpdateState(_path + '.date', 'date', DATATYPE.STRING, '', _mediaItemObject.date);
+        await this.createOrUpdateState(_path + '.duration', 'duration', DATATYPE.STRING, '', _mediaItemObject.duration);
+        await this.createOrUpdateState(_path + '.albumArtURI', 'albumArtURI', DATATYPE.STRING, '', _mediaItemObject.albumArtURI);
+        await this.createOrUpdateState(_path + '.bitrate', 'bitrate', DATATYPE.STRING, '', _mediaItemObject.bitrate);
     }
-      /*
-
- "mediaItem":{
-                 "class":"object.item.audioItem.musicTrack",
-                 "section":"Napster",
-                 "name":"Track",                                
-                 "parentID":"0/Favorites/RecentlyPlayed",                 
-                 "refID":"0/Napster/ImportedFavorites/Track/Tra.57957268",
-                 "id":"0/Favorites/RecentlyPlayed/44865",
-                 "title":"Fürstenfeld",                 
-                 "artist":"S.T.S.",
-                 "genre":null,
-                 "album":"Überdosis G'fühl",                 
-                 "originalTrackNumber":"5",
-                 "duration":"0:05:27.000",
-                 "protocolInfo":"rhapsody-track:*:audio/rhapsody-track:*",
-                 "albumArtURI":"https://cdn-profiles.tunein.com/s25217/images/logog.jpg?t=636650246801600000"
-                 "bitrate":"128"                 
-              }       
-      },
-    }
-
-    /*
-    await this.createObjectNotExists('lights.' + _deviceDescription.deviceId, _deviceDescription.name, 'device', null, true);
-    await this.createObjectNotExists('lights.' + _deviceDescription.deviceId + '.settings', 'settings', 'channel');
-    await this.createObjectNotExists('lights.' + _deviceDescription.deviceId + '.settings.channel', 'channel', 'channel');
-    await this.createObjectNotExists('lights.' + _deviceDescription.deviceId + '.values', 'values', 'channel');
-    await this.createObjectNotExists('lights.' + _deviceDescription.deviceId + '.values.channel', 'channel', 'channel');
-    await this.createObjectNotExists('lights.' + _deviceDescription.deviceId + '.control', 'values', 'channel');
-    */
-
 /*
     {
 
